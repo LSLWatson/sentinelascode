@@ -23,7 +23,7 @@ stages:
        - task: CopyFiles@2
          displayName: 'Copy Alert Rules'
          inputs:
-          SourceFolder: AnalyticsRules
+          SourceFolder: Company1/AnalyticsRules
           TargetFolder: '$(Pipeline.Workspace)'
        - task: Files-Validator@1
          inputs:
