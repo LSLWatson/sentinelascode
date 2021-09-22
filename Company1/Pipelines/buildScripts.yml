@@ -26,4 +26,4 @@ steps:
   displayName: 'Publish Pipeline Artifact'
   inputs:
     targetPath: Scripts
-    artifact: Scripts
+    artifact: Company1/Scripts
