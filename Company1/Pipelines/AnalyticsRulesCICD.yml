@@ -49,7 +49,7 @@ stages:
       steps:
       - download: current
         artifact: RulesFile
-      - download: Company1/Scripts
+      - download: Scripts
         patterns: '*.ps1'
       - task: AzurePowerShell@4
         displayName: 'Create and Update Alert Rules'
@@ -59,4 +59,3 @@ stages:
          ScriptArguments: '-Workspace $(Workspace) -RulesFile analytics-rules.json'
          azurePowerShellVersion: LatestVersion
          pwsh: true
-
