@@ -6,12 +6,12 @@
 name: build and deploy Hunting Rules
 resources:
  pipelines:
-   - pipeline: Scripts
+   - pipeline: Dev Scripts
      source: 'scriptsCI'
 trigger:
  paths:
    include:
-     - HuntingRules/*
+     - Company1/HuntingRules/*
 
 stages:
 - stage: build_hunting_rules
@@ -25,7 +25,7 @@ stages:
        - task: CopyFiles@2
          displayName: 'Copy Hunting Rules'
          inputs:
-          SourceFolder: HuntingRules
+          SourceFolder: Company1/HuntingRules
           TargetFolder: '$(Pipeline.Workspace)'
        - task: Files-Validator@1
          inputs:
@@ -47,7 +47,7 @@ stages:
        name: Azure Pipelines
        vmImage: 'windows-2019'
       variables: 
-      - group: Az connection settings
+      - group: TalespinToys Sentinel
       steps:
       - download: current
         artifact: HuntingFile
