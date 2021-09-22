@@ -57,5 +57,5 @@ stages:
          azureSubscription: 'TailspinToys Sentinel Connection'
          ScriptPath: '$(Pipeline.Workspace)/Scripts/Scripts/CreateAnalyticsRules.ps1'
          ScriptArguments: '-Workspace $(Workspace) -RulesFile analytics-rules.json'
-         azurePowerShellVersion: 6.3
+         azurePowerShellVersion: 6.3.0
          pwsh: true
