@@ -9,7 +9,7 @@ resources:
 trigger:
  paths:
    include:
-     - AnalyticsRules/*
+     - Company1/AnalyticsRules/*
 
 stages:
 - stage: build_alert_rules
