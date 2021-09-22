@@ -45,7 +45,7 @@ stages:
        name: Azure Pipelines
        vmImage: 'windows-2019'
       variables: 
-      - group: Az connection settings
+      - group: TalespinToys Sentinel
       steps:
       - download: current
         artifact: RulesFile
