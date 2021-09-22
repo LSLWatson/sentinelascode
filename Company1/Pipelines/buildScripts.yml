@@ -25,5 +25,5 @@ steps:
 - task: PublishPipelineArtifact@1
   displayName: 'Publish Pipeline Artifact'
   inputs:
-    targetPath: Company1/Scripts
+    targetPath: '$(build.artifactstagingdirectory)'
     artifact: Scripts
