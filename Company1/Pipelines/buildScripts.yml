@@ -4,7 +4,7 @@
 trigger:
  paths:
    include:
-     - Scripts/*
+     - Company1/Scripts/*
 
 pool:
   vmImage: 'windows-2019'
@@ -13,7 +13,7 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy Scripts'
   inputs:
-    SourceFolder: Scripts
+    SourceFolder: Company1/Scripts
     TargetFolder: '$(build.artifactstagingdirectory)'
 - task: Files-Validator@1
   inputs:
