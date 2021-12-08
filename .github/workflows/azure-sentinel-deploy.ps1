@@ -103,10 +103,6 @@ function IsRetryable($deploymentName) {
 
 function IsValidResourceType($template) {
     $isAllowedResources = $true
-    Write-Output "File Resource Type"
-    Write-Output $_.type.toLower()
-    Write-Output "Resource Types:"
-    Write-Output $resourceTypes
     $template.resources | ForEach-Object { 
         $isAllowedResources = $resourceTypes.contains($_.type.ToLower()) -and $isAllowedResources
     }
