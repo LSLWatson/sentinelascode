@@ -6,12 +6,12 @@
     "variables": {},
     "resources": [
 {
-    "name": "SaC - Sample Analytics Rule v1",
+    "name": "SaC - Sample Analytics Rule v2",
     "type": "Microsoft.SecurityInsights/alertRules",
     "kind": "Scheduled",
     "properties": {
-        "displayName": "SaC - Sample Analytics Rule v1",
-        "description": "SaC - Sample Analytics Rule v1 Description",
+        "displayName": "SaC - Sample Analytics Rule v2",
+        "description": "SaC - Sample Analytics Rule v2 Description",
         "severity": "High",
         "enabled": true,
         "query": "SigninLogs\r\n| where UserPrincipalName contains \"cloud.\"",
