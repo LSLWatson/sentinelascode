@@ -185,7 +185,8 @@ function main() {
         Get-ChildItem -Path $Directory -Recurse -Filter *.json |
         ForEach-Object {
             $path = $_.FullName
-	    Write-Output "Resource Type: $($_.Type)"
+	    Write-Output "Resource Type:"
+	    Write-Output $_.type
             $totalFiles ++
             $templateObject = Get-Content $path | Out-String | ConvertFrom-Json
             if (-not (IsValidResourceType $templateObject))
