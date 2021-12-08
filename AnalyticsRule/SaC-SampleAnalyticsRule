@@ -1,0 +1,54 @@
+{
+    "name": "SaC - Sample Analytics Rule",
+    "type": "Microsoft.SecurityInsights/alertRules",
+    "kind": "Scheduled",
+    "properties": {
+        "displayName": "SaC - Sample Analytics Rule",
+        "description": "SaC - Sample Analytics Rule Description",
+        "severity": "High",
+        "enabled": true,
+        "query": "SigninLogs\r\n| where UserPrincipalName contains \"cloud.\"",
+        "queryFrequency": "PT5H",
+        "queryPeriod": "PT5H",
+        "triggerOperator": "GreaterThan",
+        "triggerThreshold": 0,
+        "suppressionDuration": "PT5H",
+        "suppressionEnabled": false,
+        "tactics": [ "InitialAccess", "CredentialAccess", "Persistence" ],
+        "incidentConfiguration": {
+            "createIncident": true,
+            "groupingConfiguration": {
+                "enabled": true,
+                "reopenClosedIncident": false,
+                "lookbackDuration": "PT1H",
+                "matchingMethod": "AllEntities",
+                "groupByEntities": [],
+                "groupByAlertDetails": [],
+                "groupByCustomDetails": []
+            }
+        },
+        "eventGroupingSettings": { "aggregationKind": "SingleAlert" },
+        "alertDetailsOverride": null,
+        "customDetails": null,
+        "entityMappings": [
+            {
+                "entityType": "Account",
+                "fieldMappings": [
+                    {
+                        "identifier": "AadUserId",
+                        "columnName": "UserPrincipalName"
+                    }
+                ]
+            },
+            {
+                "entityType": "IP",
+                "fieldMappings": [
+                    {
+                        "identifier": "Address",
+                        "columnName": "IPAddress"
+                    }
+                ]
+            }
+        ]
+    }
+}
