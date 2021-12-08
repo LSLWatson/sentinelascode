@@ -7,12 +7,12 @@ name: build and deploy Playbooks
 resources:
  pipelines:
    - pipeline: Scripts
-     source: 'scriptsCI'
+     source: 'Dev Scripts'
 
 trigger:
  paths:
    include:
-     - Playbooks/*
+     - Company1/Playbooks/*
 
 stages:
 - stage: build_playbooks
@@ -27,7 +27,7 @@ stages:
          displayName: 'Copy Playbooks'
          inputs:
           SourceFolder: Playbooks
-          TargetFolder: '$(Pipeline.Workspace)'
+          TargetFolder: '$(build.artifactstagingdirectory)'
        - task: Files-Validator@1
          inputs:
            rootDir: '$(Pipeline.Workspace)/*.json'
@@ -38,7 +38,7 @@ stages:
        - task: PublishBuildArtifacts@1
          displayName: 'Publish Artifact: Playbooks'
          inputs:
-          PathtoPublish: '$(Pipeline.Workspace)'
+          PathtoPublish: '$(build.artifactstagingdirectory)'
           ArtifactName: Playbooks
 
 - stage: deploy_playbooks
@@ -48,7 +48,7 @@ stages:
        name: Azure Pipelines
        vmImage: 'windows-2019'
       variables: 
-      - group: Az connection settings
+      - group: TalespinToys Sentinel
       steps:
       - download: current
         artifact: Playbooks
@@ -57,8 +57,8 @@ stages:
       - task: AzurePowerShell@4
         displayName: 'Create and Update Playbooks'
         inputs:
-         azureSubscription: 'Soricloud Visual Studio'
+         azureSubscription: 'TailspinToys Sentinel Connection'
          ScriptPath: '$(Pipeline.Workspace)/Scripts/Scripts/CreatePlaybooks.ps1'
-         ScriptArguments: '-resourceGroup $(ResourceGroup) -PlaybooksFolder $(Pipeline.Workspace)/Playbooks'
-         azurePowerShellVersion: LatestVersion
+         ScriptArguments: '-resourceGroup $(ResourceGroup) -PlaybooksFolder $(Workspace)/Playbooks'
+         azurePowerShellVersion:  6.3.0
          pwsh: true

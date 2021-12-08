@@ -5,11 +5,11 @@ name: build and deploy Alert Rules
 resources:
  pipelines:
    - pipeline: Scripts
-     source: 'scriptsCI'
+     source: 'Dev Scripts'
 trigger:
  paths:
    include:
-     - AnalyticsRules/*
+     - Company1/AnalyticsRules/*
 
 stages:
 - stage: build_alert_rules
@@ -23,11 +23,12 @@ stages:
        - task: CopyFiles@2
          displayName: 'Copy Alert Rules'
          inputs:
-          SourceFolder: AnalyticsRules
-          TargetFolder: '$(Pipeline.Workspace)'
+          SourceFolder: Company1/AnalyticsRules
+          TargetFolder: '$(build.artifactstagingdirectory)'
+          Contents: '**\*.json'
        - task: Files-Validator@1
          inputs:
-           rootDir: '$(Pipeline.Workspace)/*.json'
+           rootDir: '$(build.artifactstagingdirectory)/*.json'
            validateXML: false
            validateJSON: true
            validateYAML: false
@@ -35,7 +36,7 @@ stages:
        - task: PublishBuildArtifacts@1
          displayName: 'Publish Artifact: RulesFile'
          inputs:
-          PathtoPublish: '$(Pipeline.Workspace)'
+          PathtoPublish: '$(build.artifactstagingdirectory)'
           ArtifactName: RulesFile
 
 - stage: deploy_alert_rules
@@ -45,18 +46,17 @@ stages:
        name: Azure Pipelines
        vmImage: 'windows-2019'
       variables: 
-      - group: Az connection settings
+      - group: TalespinToys Sentinel
       steps:
       - download: current
         artifact: RulesFile
       - download: Scripts
-        patterns: '*.ps1'
+        patterns: '**/*.ps1'
       - task: AzurePowerShell@4
         displayName: 'Create and Update Alert Rules'
         inputs:
-         azureSubscription: 'Soricloud Visual Studio'
+         azureSubscription: 'TailspinToys Sentinel Connection'
          ScriptPath: '$(Pipeline.Workspace)/Scripts/Scripts/CreateAnalyticsRules.ps1'
          ScriptArguments: '-Workspace $(Workspace) -RulesFile analytics-rules.json'
-         azurePowerShellVersion: LatestVersion
+         azurePowerShellVersion: 6.3.0
          pwsh: true
-
