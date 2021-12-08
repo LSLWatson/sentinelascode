@@ -27,6 +27,7 @@ $resourceTypes = $contentTypes.Split(",") | ForEach-Object { $contentTypeMapping
 $MaxRetries = 3
 $secondsBetweenAttempts = 5
 
+Write-Output $resourceTypes
 function AttemptAzLogin($psCredential, $tenantId, $cloudEnv) {
     $maxLoginRetries = 3
     $delayInSeconds = 30
@@ -184,6 +185,7 @@ function main() {
         Get-ChildItem -Path $Directory -Recurse -Filter *.json |
         ForEach-Object {
             $path = $_.FullName
+	    Write-Output "Resource Type: $($_.Type)"
             $totalFiles ++
             $templateObject = Get-Content $path | Out-String | ConvertFrom-Json
             if (-not (IsValidResourceType $templateObject))
