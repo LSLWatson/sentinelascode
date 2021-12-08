@@ -10,8 +10,8 @@
     "type": "Microsoft.SecurityInsights/alertRules",
     "kind": "Scheduled",
     "properties": {
-        "displayName": "SaC - Sample Analytics Rule",
-        "description": "SaC - Sample Analytics Rule Description",
+        "displayName": "SaC - Sample Analytics Rule1",
+        "description": "SaC - Sample Analytics Rule1 Description",
         "severity": "High",
         "enabled": true,
         "query": "SigninLogs\r\n| where UserPrincipalName contains \"cloud.\"",
