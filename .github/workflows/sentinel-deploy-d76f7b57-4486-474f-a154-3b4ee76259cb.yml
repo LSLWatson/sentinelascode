@@ -13,7 +13,7 @@ on:
   push:
     branches: [ main ]
     paths:
-    - '**'
+    - 'SentinelContent/**'
     - '!.github/workflows/**'  # this filter prevents other workflow changes from triggering this workflow
     - '.github/workflows/sentinel-deploy-d76f7b57-4486-474f-a154-3b4ee76259cb.yml'
 
@@ -23,7 +23,7 @@ jobs:
     env:
       resourceGroupName: 'eicc-sentinel-rg'
       workspaceName: 'eicc-inf-d-u000-law'
-      directory: '${{ github.workspace }}'
+      directory: '${{ github.workspace }}/SentinelContent'
       cloudEnv: 'AzureCloud'
       creds: ${{ secrets.AZURE_SENTINEL_CREDENTIALS_d76f7b574486474fa1543b4ee76259cb }}
       contentTypes: 'AnalyticsRule,AutomationRule,HuntingQuery,Parser,Playbook,Workbook'
