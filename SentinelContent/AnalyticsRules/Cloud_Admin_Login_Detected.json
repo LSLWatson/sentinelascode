@@ -16,7 +16,7 @@
             "properties": {
                 "displayName": "Cloud Admin Login Detected",
                 "description": "",
-                "severity": "Medium",
+                "severity": "High",
                 "enabled": false,
                 "query": "SigninLogs\r\n| where UserPrincipalName contains \"admin\"",
                 "queryFrequency": "PT5M",
