@@ -18,7 +18,7 @@
                 "description": "",
                 "severity": "Medium",
                 "enabled": false,
-                "query": "SigninLogs\r\n| where UserPrincipalName contains \"cloud.\"",
+                "query": "SigninLogs\r\n| where UserPrincipalName contains \"admin\"",
                 "queryFrequency": "PT5M",
                 "queryPeriod": "PT5M",
                 "triggerOperator": "GreaterThan",
