@@ -1,2 +1,3 @@
 FileName, CommitSha
+SentinelContent/AnalyticsRules/Account_added_and_removed_from_privileged_groups.json,801fb2b384ddea32ed165d5db0438ffc79951a03
 SentinelContent/AnalyticsRules/Cloud_Admin_Login_Detected.json,ec15b414b701f901d7d310ea88e462d49dac8bdc
