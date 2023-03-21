@@ -14,7 +14,7 @@
             "kind": "Scheduled",
             "apiVersion": "2022-09-01-preview",
             "properties": {
-                "displayName": "SaC - Account added and removed from privileged groups",
+                "displayName": "Code - Account added and removed from privileged groups",
                 "description": "Identifies accounts that are added to privileged group and then quickly removed, which could be a sign of compromise.",
                 "severity": "Low",
                 "enabled": false,
