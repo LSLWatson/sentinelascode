@@ -1,0 +1,27 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workspace": {
+            "metadata": {
+                "description": "Log Analytics Workspace Name"
+            },
+            "type": "String"
+        }
+    },
+    "resources": [
+        {
+            "properties": {
+                "category": "ASIM",
+                "displayName": "Authentication ASIM parser for Microsoft Defender for IoT endpoint logs",
+                "query": "let Authentication_MD4IoT=(disabled:bool=false)\n  {\n    SecurityIoTRawEvent | where not(disabled)\n    | where RawEventName == \"Login\" \n    | extend\n      EventDetails = todynamic(EventDetails)\n      //\n    | extend\n      EventOriginalUid = tostring(EventDetails.OriginalEventId), \n      EventProduct = 'Microsoft Defender for IoT',\n      EventCount=int(1),\n      EventVendor = 'Microsoft', \n      EventSchemaVersion = '0.1.0', \n      EventStartTime = todatetime(EventDetails.TimestampUTC), \n      EventEndTime = todatetime(TimeGenerated), \n      EventType = iff (EventDetails.Operation == 'Logout', 'Logoff', 'Logon'),  \n      EventResult = iff (EventDetails.Operation == 'LoginFailed', 'Failure', 'Success')  \n      //\n    | extend\n      ActingProcessId = tostring(EventDetails.ProcessId),  \n      ActingProcessName = tostring(EventDetails.Executable),  // -- Linux input device or service used to authenticate, for example pts/1, tty1, pts/0, ssh:notty \n      DvcOs = iif (EventDetails.MessageSource == \"Linux\", \"Linux\", \"Windows\"),  // -- Intermediate fix\n      TargetUsernameType = \"Simple\",\n      TargetUsername = tostring(EventDetails.UserName),\n      SrcIpAddr = tostring(EventDetails.RemoteAddress) \n    | project-rename\n      DvcHostname = DeviceId, \n      EventProductVersion = AgentVersion,  // -- Not available in Windows\n      _ResourceId = AssociatedResourceId, \n      _SubscriptionId = AzureSubscriptionId \n      //\n      // -- aliases\n    | extend \n      User = TargetUsername, \n      Process = ActingProcessName, \n      Dvc = DvcHostname,\n      SrcDvcIpAddr = SrcIpAddr,\n      IpAddr = SrcIpAddr\n   };\n   Authentication_MD4IoT(disabled)",
+                "functionAlias": "ASimAuthenticationMD4IoT",
+                "functionParameters": "disabled:bool=False",
+                "version": 2
+            },
+            "name": "[concat(parameters('workspace'),'/Microsoft.SecurityInsights/asimauthenticationmd4iot')]",
+            "type": "Microsoft.OperationalInsights/workspaces/providers/savedSearches",
+            "apiVersion": "2020-08-01"
+        }
+    ]
+}

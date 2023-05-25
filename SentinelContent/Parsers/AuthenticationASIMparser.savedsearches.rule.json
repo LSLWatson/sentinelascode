@@ -1,0 +1,27 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workspace": {
+            "metadata": {
+                "description": "Log Analytics Workspace Name"
+            },
+            "type": "String"
+        }
+    },
+    "resources": [
+        {
+            "properties": {
+                "category": "ASIM",
+                "displayName": "Authentication ASIM parser",
+                "query": "let DisabledParsers=materialize(_GetWatchlist('ASimDisabledParsers') | where SearchKey in ('Any', 'ExcludeASimAuthentication') | extend SourceSpecificParser=column_ifexists('SourceSpecificParser','') | distinct SourceSpecificParser);\nlet ASimAuthenticationDisabled=toscalar('ExcludeASimAuthentication' in (DisabledParsers) or 'Any' in (DisabledParsers)); \nunion isfuzzy=true\n    vimAuthenticationEmpty\n  , ASimAuthenticationAADManagedIdentitySignInLogs    (ASimAuthenticationDisabled or ('ExcludeASimAuthenticationAADManagedIdentitySignInLogs'  in (DisabledParsers) ))\n  , ASimAuthenticationAADNonInteractiveUserSignInLogs (ASimAuthenticationDisabled or ('ExcludeASimAuthenticationAADNonInteractiveUserSignInLogs'      in (DisabledParsers) ))\n  , ASimAuthenticationAADServicePrincipalSignInLogs   (ASimAuthenticationDisabled or ('ExcludeASimAuthenticationAADServicePrincipalSignInLogs'      in (DisabledParsers) ))\n  , ASimAuthenticationSigninLogs    (ASimAuthenticationDisabled or ('ExcludeASimAuthenticationSigninLogs' in (DisabledParsers) ))\n  , ASimAuthenticationAWSCloudTrail (ASimAuthenticationDisabled or ('ExcludeASimAuthenticationAWSCloudTrail'      in (DisabledParsers) ))\n  , ASimAuthenticationOktaSSO (ASimAuthenticationDisabled or ('ExcludeASimAuthenticationOktaSSO'      in (DisabledParsers) ))\n  , ASimAuthenticationM365Defender  (ASimAuthenticationDisabled or ('ExcludeASimAuthenticationM365Defender'      in (DisabledParsers) ))\n  , ASimAuthenticationMicrosoftWindowsEvent     (ASimAuthenticationDisabled or ('ExcludeASimAuthenticationMicrosoftWindowsEvent'      in (DisabledParsers) ))\n  , ASimAuthenticationMD4IoT  (ASimAuthenticationDisabled or ('ExcludeASimAuthenticationMD4IoT'  in (DisabledParsers) ))\n",
+                "functionAlias": "ASimAuthentication",
+                "functionParameters": "disabled:bool=False",
+                "version": 2
+            },
+            "name": "[concat(parameters('workspace'),'/Microsoft.SecurityInsights/asimauthentication')]",
+            "type": "Microsoft.OperationalInsights/workspaces/providers/savedSearches",
+            "apiVersion": "2020-08-01"
+        }
+    ]
+}

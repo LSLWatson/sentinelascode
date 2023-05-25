@@ -1,0 +1,27 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workspace": {
+            "metadata": {
+                "description": "Log Analytics Workspace Name"
+            },
+            "type": "String"
+        }
+    },
+    "resources": [
+        {
+            "properties": {
+                "category": "ASIM",
+                "displayName": "Authentication ASIM parser for AWS sign-in logs",
+                "query": "let AWSLogon=(disabled:bool=false){\nAWSCloudTrail | where not(disabled)\n | where EventName == 'ConsoleLogin'\n | extend\n  EventVendor = 'AWS'\n  , EventProduct='CloudTrail'\n  , EventCount=int(1)\n  , EventSchemaVersion='0.1.0'\n  , EventResult= iff (ResponseElements has_cs 'Success', 'Success', 'Failure')\n  , EventStartTime=TimeGenerated\n  , EventEndTime=TimeGenerated\n  , EventType='Logon'\n  , LogonMethod=iff(AdditionalEventData has '\"MFAUsed\": \"No\"', 'NoMFA', 'MFA')\n  , TargetUrl =tostring(todynamic(AdditionalEventData).LoginTo)\n  , TargetUsernameType='Simple'\n  , TargetUserIdType='AWSId'\n  | project-rename\n    EventOriginalUid= AwsEventId\n  , EventOriginalResultDetails= ErrorMessage\n  , TargetUsername= UserIdentityUserName\n  , TargetUserType=UserIdentityType\n  , TargetUserId=UserIdentityAccountId \n  , SrcDvcIpAddr=SourceIpAddress\n  , HttpUserAgent=UserAgent\n// **** Aliases\n| extend\n       User=TargetUsername\n      , LogonTarget=tostring(split(TargetUrl,'?')[0])\n      , Dvc=EventVendor\n  };\n  AWSLogon(disabled)\n",
+                "functionAlias": "ASimAuthenticationAWSCloudTrail",
+                "functionParameters": "disabled:bool=False",
+                "version": 2
+            },
+            "name": "[concat(parameters('workspace'),'/Microsoft.SecurityInsights/asimauthenticationawscloudtrail')]",
+            "type": "Microsoft.OperationalInsights/workspaces/providers/savedSearches",
+            "apiVersion": "2020-08-01"
+        }
+    ]
+}
