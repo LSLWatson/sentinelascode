@@ -1,0 +1,27 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workspace": {
+            "metadata": {
+                "description": "Log Analytics Workspace Name"
+            },
+            "type": "String"
+        }
+    },
+    "resources": [
+        {
+            "properties": {
+                "category": "ASIM",
+                "displayName": "Authentication ASIM filtering parser",
+                "query": "let Generic=(starttime:datetime=datetime(null), endtime:datetime=datetime(null), targetusername_has:string=\"*\"){\nlet DisabledParsers=materialize(_GetWatchlist('ASimDisabledParsers') | where SearchKey in ('Any', 'ExcludeimAuthentication') | extend SourceSpecificParser=column_ifexists('SourceSpecificParser','') | distinct SourceSpecificParser);\nlet imAuthenticationDisabled=toscalar('ExcludeimAuthentication' in (DisabledParsers) or 'Any' in (DisabledParsers)); \nunion isfuzzy=true\n    vimAuthenticationEmpty\n  , vimAuthenticationAADManagedIdentitySignInLogs   (starttime, endtime, targetusername_has, (imAuthenticationDisabled or('ExcludevimAuthenticationAADManagedIdentitySignInLogs'      in (DisabledParsers) )))\n  , vimAuthenticationAADNonInteractiveUserSignInLogs(starttime, endtime, targetusername_has, (imAuthenticationDisabled or('ExcludevimAuthenticationAADNonInteractiveUserSignInLogs'   in (DisabledParsers) )))\n  , vimAuthenticationAADServicePrincipalSignInLogs  (starttime, endtime, targetusername_has, (imAuthenticationDisabled or('ExcludevimAuthenticationAADServicePrincipalSignInLogs'     in (DisabledParsers) )))\n  , vimAuthenticationSigninLogs                     (starttime, endtime, targetusername_has, (imAuthenticationDisabled or('ExcludevimAuthenticationSigninLogs'                        in (DisabledParsers) )))\n  , vimAuthenticationAWSCloudTrail                  (starttime, endtime, targetusername_has, (imAuthenticationDisabled or('ExcludevimAuthenticationAWSCloudTrail'                     in (DisabledParsers) )))\n  , vimAuthenticationOktaSSO                        (starttime, endtime, targetusername_has, (imAuthenticationDisabled or('ExcludevimAuthenticationOktaSSO'                           in (DisabledParsers) )))\n  , vimAuthenticationM365Defender                   (starttime, endtime, targetusername_has, (imAuthenticationDisabled or('ExcludevimAuthenticationM365Defender'                      in (DisabledParsers) )))\n  , vimAuthenticationMicrosoftWindowsEvent          (starttime, endtime, targetusername_has, (imAuthenticationDisabled or('ExcludevimAuthenticationMicrosoftWindowsEvent'             in (DisabledParsers) )))\n  , vimAuthenticationMD4IoT                         (starttime, endtime, targetusername_has, (imAuthenticationDisabled or('ExcludevimAuthenticationMD4IoT'                            in (DisabledParsers) )))\n   };\nGeneric(starttime, endtime, targetusername_has)\n",
+                "functionAlias": "imAuthentication",
+                "functionParameters": "starttime:datetime=datetime(null),endtime:datetime=datetime(null),targetusername_has:string='*'",
+                "version": 2
+            },
+            "name": "[concat(parameters('workspace'),'/Microsoft.SecurityInsights/imauthentication')]",
+            "type": "Microsoft.OperationalInsights/workspaces/providers/savedSearches",
+            "apiVersion": "2020-08-01"
+        }
+    ]
+}
