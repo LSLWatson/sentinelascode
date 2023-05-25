@@ -10,14 +10,14 @@
       },
       "ParserFunctionAlias": {
           "type": "string",
-        "default": "SampleParser"
+        "default": "SampleParser",
           "metadata": {
              "description": "Parser function alias"
           }
       },
       "ParserCode": {
           "type": "string",
-        "default": "//This is a sample Parser"
+        "default": "//This is a sample Parser",
           "metadata": {
              "description": "KQL parser query"
           }
