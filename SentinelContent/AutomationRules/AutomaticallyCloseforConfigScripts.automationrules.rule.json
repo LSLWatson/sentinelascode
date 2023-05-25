@@ -1,0 +1,83 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workspace": {
+            "metadata": {
+                "description": "Log Analytics Workspace Name"
+            },
+            "type": "String"
+        },
+        "AutomationRuleDisplayName": {
+            "metadata": {
+                "description": "AutomationRuleDisplayName"
+            },
+            "defaultValue": "Automatically Close for Config Scripts",
+            "type": "String"
+        }
+    },
+    "resources": [
+        {
+            "name": "2e68aa96-f205-484c-ada4-9c18e0782859",
+            "type": "Microsoft.SecurityInsights/automationRules",
+            "properties": {
+                "displayName": "[parameters('AutomationRuleDisplayName')]",
+                "order": 5,
+                "triggeringLogic": {
+                    "isEnabled": true,
+                    "triggersOn": "Incidents",
+                    "triggersWhen": "Created",
+                    "conditions": [
+                        {
+                            "conditionType": "Property",
+                            "conditionProperties": {
+                                "propertyName": "IncidentRelatedAnalyticRuleIds",
+                                "operator": "Contains",
+                                "propertyValues": [
+                                    "[concat(resourceId('Microsoft.OperationalInsights/workspaces/providers/', parameters('workspace'), 'Microsoft.SecurityInsights'),'/alertRules/0d3115cc-042e-42bf-802f-fcf9bf3dd7cc')]"
+                                ]
+                            }
+                        },
+                        {
+                            "conditionType": "Property",
+                            "conditionProperties": {
+                                "propertyName": "AccountName",
+                                "operator": "Equals",
+                                "propertyValues": [
+                                    "vmconfiguser"
+                                ]
+                            }
+                        },
+                        {
+                            "conditionType": "Property",
+                            "conditionProperties": {
+                                "propertyName": "ProcessCommandLine",
+                                "operator": "Contains",
+                                "propertyValues": [
+                                    "configurationscript.ps1"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "actions": [
+                    {
+                        "order": 1,
+                        "actionType": "ModifyProperties",
+                        "actionConfiguration": {
+                            "severity": null,
+                            "status": "Closed",
+                            "classification": "BenignPositive",
+                            "classificationReason": "SuspiciousButExpected",
+                            "classificationComment": "This is known activity used for configuring Virtual Machines",
+                            "owner": null,
+                            "labels": null
+                        }
+                    }
+                ]
+            },
+            "apiVersion": "2019-01-01-preview",
+            "scope": "[concat('Microsoft.OperationalInsights/workspaces/', parameters('workspace'))]"
+        }
+    ]
+}

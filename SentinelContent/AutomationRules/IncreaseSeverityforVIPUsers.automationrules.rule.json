@@ -1,0 +1,64 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workspace": {
+            "metadata": {
+                "description": "Log Analytics Workspace Name"
+            },
+            "type": "String"
+        },
+        "AutomationRuleDisplayName": {
+            "metadata": {
+                "description": "AutomationRuleDisplayName"
+            },
+            "defaultValue": "Increase Severity for VIP Users",
+            "type": "String"
+        }
+    },
+    "resources": [
+        {
+            "name": "a16e130c-caa4-439d-b4ce-907bbbd7fc64",
+            "type": "Microsoft.SecurityInsights/automationRules",
+            "properties": {
+                "displayName": "[parameters('AutomationRuleDisplayName')]",
+                "order": 15,
+                "triggeringLogic": {
+                    "isEnabled": true,
+                    "triggersOn": "Incidents",
+                    "triggersWhen": "Created",
+                    "conditions": [
+                        {
+                            "conditionType": "Property",
+                            "conditionProperties": {
+                                "propertyName": "AccountName",
+                                "operator": "Equals",
+                                "propertyValues": [
+                                    "CEO@talespintoys.com",
+                                    "CFO@talespintoys.com"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "actions": [
+                    {
+                        "order": 1,
+                        "actionType": "ModifyProperties",
+                        "actionConfiguration": {
+                            "severity": "High",
+                            "status": null,
+                            "classification": null,
+                            "classificationReason": null,
+                            "classificationComment": null,
+                            "owner": null,
+                            "labels": null
+                        }
+                    }
+                ]
+            },
+            "apiVersion": "2019-01-01-preview",
+            "scope": "[concat('Microsoft.OperationalInsights/workspaces/', parameters('workspace'))]"
+        }
+    ]
+}
