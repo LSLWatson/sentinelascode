@@ -10,7 +10,7 @@ $contentTypeMapping = @{
     "AnalyticsRule"=@("Microsoft.OperationalInsights/workspaces/providers/alertRules", "Microsoft.OperationalInsights/workspaces/providers/alertRules/actions");
     "AutomationRule"=@("Microsoft.OperationalInsights/workspaces/providers/automationRules");
     "HuntingQuery"=@("Microsoft.OperationalInsights/workspaces/savedSearches");
-    "Parser"=@("Microsoft.OperationalInsights/workspaces/savedSearches");
+    "Parser"=@("Microsoft.OperationalInsights/workspaces/providers/savedSearches");
     "Playbook"=@("Microsoft.Web/connections", "Microsoft.Logic/workflows", "Microsoft.Web/customApis");
     "Workbook"=@("Microsoft.Insights/workbooks");
 }
