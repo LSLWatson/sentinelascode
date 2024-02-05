@@ -14,7 +14,7 @@
             "kind": "Scheduled",
             "apiVersion": "2021-09-01-preview",
             "properties": {
-                "displayName": "Cloud Admin Login Detected",
+                "displayName": "Elite Cloud Admin Login Detected V2",
                 "description": "",
                 "severity": "High",
                 "enabled": false,
