@@ -14,9 +14,9 @@
             "kind": "Scheduled",
             "apiVersion": "2021-09-01-preview",
             "properties": {
-                "displayName": "Elite Cloud Admin Login Detected V2",
+                "displayName": "Super VIP Cloud Admin Logon Detected V1",
                 "description": "",
-                "severity": "High",
+                "severity": "Medium",
                 "enabled": false,
                 "query": "SigninLogs\r\n| where UserPrincipalName contains \"admin\"",
                 "queryFrequency": "PT5M",
