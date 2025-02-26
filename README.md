@@ -1,4 +1,6 @@
+---
 title: Sentinel As Code
-redirect_from: /tree/main/Test-Redirect
-
+redirect_from:
+  - /tree/main/Test-Redirect
+---
 # sentinelascode
